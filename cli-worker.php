@@ -1,27 +1,25 @@
 <?php
-
 require_once __DIR__ . '/vendor/autoload.php';
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PhpAmqpLib\Message\AMQPMessage;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-define("RABBITMQ_HOST", $_ENV['RABBITMQ_HOST']);
-define("RABBITMQ_PORT", $_ENV['RABBITMQ_PORT']);
-define("RABBITMQ_USERNAME", $_ENV['RABBITMQ_USERNAME']);
-define("RABBITMQ_PASSWORD", $_ENV['RABBITMQ_PASSWORD']);
-define("RABBITMQ_QUEUE_NAME", $_ENV['RABBITMQ_QUEUE_NAME']);
+define("RABBITMQ_HOST", getenv('RABBITMQ_HOST'));
+define("RABBITMQ_PORT", getenv('RABBITMQ_PORT'));
+define("RABBITMQ_USERNAME", getenv('RABBITMQ_USERNAME'));
+define("RABBITMQ_PASSWORD", getenv('RABBITMQ_PASSWORD'));
+define("RABBITMQ_QUEUE_NAME", getenv('RABBITMQ_QUEUE_NAME'));
 
-$connection = new \PhpAmqpLib\Connection\AMQPStreamConnection(
-    RABBITMQ_HOST, 
-    RABBITMQ_PORT, 
-    RABBITMQ_USERNAME, 
-    RABBITMQ_PASSWORD
-);
-
-
+$connection = new AMQPStreamConnection(
+  RABBITMQ_HOST, 
+  RABBITMQ_PORT, 
+  RABBITMQ_USERNAME, 
+  RABBITMQ_PASSWORD);
 $channel = $connection->channel();
 
-# Create the queue if it doesnt already exist.
+# Create the queue if it does not already exist.
 $channel->queue_declare(
     $queue = RABBITMQ_QUEUE_NAME,
     $passive = false,

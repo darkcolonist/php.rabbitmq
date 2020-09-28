@@ -1,20 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>my rabbitMQ tester</title>
-  <style>
-    * {
-      font-family: "lucida console";
-      background-color: black;
-      color: lightgreen;
-    }
-  </style>
-</head>
-<body>
-
-</body>
-</html>
-
 <?php 
 require_once __DIR__ . '/vendor/autoload.php';
 use Dotenv\Dotenv;
@@ -49,9 +32,10 @@ $channel->queue_declare(
     $ticket = null
 );
 
-for ($i=0; $i < 1; $i++) { 
+$i = 0;
+while(true){
   $jobArray = array(
-      'id' => $i,
+      'id' => $i++,
       'task' => 'sleep',
       'sleep_period' => rand(0, 3)
   );
@@ -65,6 +49,3 @@ for ($i=0; $i < 1; $i++) {
   print 'Job created' . PHP_EOL;
   sleep(1);
 }
-
-
-echo "hello worl";
